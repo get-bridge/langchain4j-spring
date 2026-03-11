@@ -112,4 +112,11 @@ public @interface AiService {
      * this attribute specifies the names of beans containing methods annotated with {@link Tool} that should be used by this AI Service.
      */
     String[] tools() default {};
+
+    /**
+     * When the {@link #wiringMode()} is set to {@link AiServiceWiringMode#EXPLICIT},
+     * this attribute specifies the name of a bean containing a method annotated with {@link SystemMessageTransformer}
+     * that should be used by this AI Service to transform system messages before they are sent to the model.
+     */
+    String systemMessageTransformer() default "";
 }

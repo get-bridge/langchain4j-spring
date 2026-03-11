@@ -38,6 +38,7 @@ class AiServiceFactory implements FactoryBean<Object> {
     private ModerationModel moderationModel;
     private ToolProvider toolProvider;
     private List<Object> tools;
+    private SystemMessageTransformer systemMessageTransformer;
 
     public AiServiceFactory(Class<Object> aiServiceClass) {
         this.aiServiceClass = aiServiceClass;
@@ -79,6 +80,10 @@ class AiServiceFactory implements FactoryBean<Object> {
         this.tools = tools;
     }
 
+    public void setSystemMessageTransformer(SystemMessageTransformer systemMessageTransformer) {
+        this.systemMessageTransformer = systemMessageTransformer;
+    }
+
     @Override
     public Object getObject() {
 
@@ -112,6 +117,10 @@ class AiServiceFactory implements FactoryBean<Object> {
 
         if (toolProvider != null) {
             builder = builder.toolProvider(toolProvider);
+        }
+
+        if (systemMessageTransformer != null) {
+            builder = builder.systemMessageTransformer((message, context) -> systemMessageTransformer.transform(message, context));
         }
 
         if (!isNullOrEmpty(tools)) {

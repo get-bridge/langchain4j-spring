@@ -60,6 +60,7 @@ public class AiServicesAutoConfig implements ApplicationEventPublisherAware {
             String[] retrievalAugmentors = beanFactory.getBeanNamesForType(RetrievalAugmentor.class);
             String[] moderationModels = beanFactory.getBeanNamesForType(ModerationModel.class);
             String[] toolProviders = beanFactory.getBeanNamesForType(ToolProvider.class);
+            String[] systemMessageTransformers = beanFactory.getBeanNamesForType(SystemMessageTransformer.class);
 
             Set<String> toolBeanNames = new HashSet<>();
             List<ToolSpecification> toolSpecifications = new ArrayList<>();
@@ -174,6 +175,16 @@ public class AiServicesAutoConfig implements ApplicationEventPublisherAware {
                         toolProviders,
                         "toolProvider",
                         "toolProvider",
+                        propertyValues
+                );
+
+                addBeanReference(
+                        SystemMessageTransformer.class,
+                        aiServiceAnnotation,
+                        aiServiceAnnotation.systemMessageTransformer(),
+                        systemMessageTransformers,
+                        "systemMessageTransformer",
+                        "systemMessageTransformer",
                         propertyValues
                 );
 
