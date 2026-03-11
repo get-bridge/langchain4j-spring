@@ -31,9 +31,16 @@ jobs:
           # (right after <artifactId>), so it no longer inherits dev.langchain4j
           sed -i '/<artifactId>langchain4j-spring-boot-starter<\/artifactId>/a\    <groupId>com.bridge</groupId>' \
             langchain4j-spring-boot-starter/pom.xml
-          # Remove the central-publishing-maven-plugin from the parent POM
+          # Remove the entire central-publishing-maven-plugin <plugin> block from the parent POM
           # (it has extensions=true which hijacks the deploy phase away from maven-deploy-plugin)
-          sed -i '/<groupId>org.sonatype.central<\/groupId>/,/<\/plugin>/d' pom.xml
+          python3 -c "
+          import re
+          with open('pom.xml', 'r') as f:
+              content = f.read()
+          content = re.sub(r'\s*<plugin>\s*<groupId>org\.sonatype\.central</groupId>.*?</plugin>', '', content, flags=re.DOTALL)
+          with open('pom.xml', 'w') as f:
+              f.write(content)
+          "
 
       - name: snapshot_release
         env:
