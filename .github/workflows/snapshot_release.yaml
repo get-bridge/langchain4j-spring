@@ -25,6 +25,13 @@ jobs:
           server-username: GITHUB_ACTOR
           server-password: GITHUB_TOKEN
 
+      - name: Override groupId to com.bridge
+        run: |
+          # Parent POM: change the project groupId
+          sed -i 's|<groupId>dev\.langchain4j</groupId>|<groupId>com.bridge</groupId>|' pom.xml
+          # Submodule POM: change the parent groupId reference
+          sed -i 's|<groupId>dev\.langchain4j</groupId>|<groupId>com.bridge</groupId>|' langchain4j-spring-boot-starter/pom.xml
+
       - name: snapshot_release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
